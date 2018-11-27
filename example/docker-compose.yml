@@ -1,0 +1,39 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: demo
+      TZ: Asia/Chongqing
+    volumes:
+      - demo-db:/var/lib/mysql
+    ports:
+      - "3307:3306"
+  init-app:
+    build: .
+    environment:
+      - FLASK_APP=demo
+    links:
+      - db
+    depends_on:
+      - db
+    command: pipenv run flask init-db
+  app:
+    build: .
+    environment:
+      - FLASK_APP=demo
+    links:
+      - db
+    depends_on:
+      - db
+      - init-app
+    ports:
+      - "5000:5000"
+
+volumes:
+  demo-db:
+    driver: local
