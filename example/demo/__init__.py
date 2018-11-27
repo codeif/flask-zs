@@ -9,7 +9,6 @@ def create_app():
 
     register_blueprints(app, 'demo.views')
 
-    print('hahaha')
     commands.init_app(app)
 
     return app
