@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 services:
   db:
@@ -9,31 +9,43 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: demo
       TZ: Asia/Chongqing
-    volumes:
-      - demo-db:/var/lib/mysql
+    # volumes:
+    #   - demo-db:/var/lib/mysql
     ports:
-      - "3307:3306"
-  init-app:
-    build: .
-    environment:
-      - FLASK_APP=demo
-    links:
-      - db
-    depends_on:
-      - db
-    command: pipenv run flask init-db
+      - "3305:3306"
   app:
     build: .
     environment:
-      - FLASK_APP=demo
+      FLASK_APP: demo
+      MYSQL_ROOT_PASSWORD: password
     links:
       - db
     depends_on:
       - db
-      # - init-app
+    # command: pipenv run flask init-db
+    entrypoint:
+      - bash
+      - -c
+      - |
+        set -e
+        echo 'Waiting for MySQL to be available'
+        maxTries=20
+        echo "$$MYSQL_ROOT_PASSWORD"
+        while [ "$$maxTries" -gt 0 ] && ! mysql -h "db" -uroot -p"$$MYSQL_ROOT_PASSWORD" -e ";"; do
+          let maxTries--
+          sleep 1
+        done
+        echo
+        echo "$$MYSQL_ROOT_PASSWORD"
+        if [ "$$maxTries" -le 0 ]; then
+            echo >&2 'error: unable to contact Postgres after 10 tries'
+            exit 1
+        fi
+        pipenv run flask init-db
+        exec pipenv run flask run -h 0.0.0.0
     ports:
       - "5000:5000"
 
-volumes:
-  demo-db:
-    driver: local
+# volumes:
+#   demo-db:
+#     driver: local
