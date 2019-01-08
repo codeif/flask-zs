@@ -11,14 +11,12 @@
 import decimal
 import importlib
 import json
-import re
 import uuid
 from datetime import date, datetime, time
 
 import requests
 from flask import Blueprint, Flask, abort, jsonify
 from flask.views import MethodView
-from sqlalchemy.ext.declarative import declared_attr
 from werkzeug.utils import find_modules
 
 from .exceptions import FormValidationError
@@ -102,14 +100,7 @@ class TodictMixin:
         return self.todict(only=only)
 
 
-class TableNameMixin:
-    @declared_attr
-    def __tablename__(cls):
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', cls.__name__)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-
-
-class BaseModel(TodictMixin, TableNameMixin):
+class BaseModel(TodictMixin):
     pass
 
 
