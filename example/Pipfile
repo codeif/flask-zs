@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 pymysql = "*"
-flask-zs = "*"
 flask-sqlalchemy = "*"
+"ed0a5ba" = {path = "./..", editable = true}
 
 [dev-packages]
 

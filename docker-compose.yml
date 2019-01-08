@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: demo
+      TZ: Asia/Chongqing
+    volumes:
+      - zs-example-db:/var/lib/mysql
+    # ports:
+    #   - "3306:3306"
+  web:
+    image: zs-example
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    volumes:
+      - ".:/app:rw"
+    command: ["pipenv", "run", "flask", "run", "-h", "0.0.0.0"]
+
+volumes:
+  zs-example-db:
+    driver: local
