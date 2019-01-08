@@ -12,7 +12,7 @@ services:
     volumes:
       - zs-example-db:/var/lib/mysql
     # ports:
-    #   - "3306:3306"
+    #   - "3806:3306"
   web:
     image: zs-example
     depends_on:
