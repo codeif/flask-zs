@@ -24,11 +24,12 @@ class BaseCustomException(Exception):
     errcode = 1000
     errmsg = 'Server Unkown Error.'
 
-    def __init__(self, errmsg=None, errcode=None):
+    def __init__(self, errmsg=None, errcode=None, **kw):
         if errmsg:
             self.errmsg = errmsg
         if errcode is not None:
             self.errcode = errcode
+        self.kw = kw
 
     def __str__(self):
         return '%d: %s' % (self.errcode, self.errmsg)

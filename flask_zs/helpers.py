@@ -19,8 +19,6 @@ from flask import Blueprint, Flask, abort, jsonify
 from flask.views import MethodView
 from werkzeug.utils import find_modules
 
-from .exceptions import FormValidationError
-
 
 def register_blueprints(app, import_path, bp_name='bp'):
     """Register all Blueprint instances on the specified Flask application found
@@ -197,11 +195,7 @@ class BaseItemView(MethodView, PaginationMixin):
         item = self.get_item(item_id)
 
         form = self.item_form_cls(item)
-        if form.validate():
-            item = form.save()
-            return item.todict()
-        else:
-            raise FormValidationError(form)
+        return form.resp()
 
     def delete(self, item_id):
         abort(405)
