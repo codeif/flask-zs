@@ -15,8 +15,7 @@ current_module = sys.modules[__name__]
 
 exceptions = [
     ('NoError', 0, 'OK'),
-    ('LoginRequired', 1001, 'Login required.'),
-    ('BindPhoneRequired', 1002, 'Bind phone required.'),
+    ('LoginRequired', 1001, '需要登录'),
 ]
 
 
