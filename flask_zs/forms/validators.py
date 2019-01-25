@@ -1,14 +1,15 @@
 import re
 
-from wtforms.validators import (
-    URL, UUID, AnyOf, DataRequired, Email, EqualTo, InputRequired, IPAddress, Length, MacAddress, NoneOf, NumberRange)
+from wtforms.validators import URL, UUID, AnyOf
+from wtforms.validators import DataRequired as DataRequired_
+from wtforms.validators import Email, EqualTo, InputRequired, IPAddress, Length, MacAddress, NoneOf, NumberRange
 from wtforms.validators import Optional as Optional_
 from wtforms.validators import (
-    Regexp, StopValidation, ValidationError, any_of, data_required, email, equal_to, input_required, ip_address, length,
-    mac_address, none_of, number_range, regexp, url)
+    Regexp, StopValidation, ValidationError, any_of, email, equal_to, input_required, ip_address, length, mac_address,
+    none_of, number_range, regexp, url)
 
 __all__ = (
-    'DataRequired', 'data_required', 'Email', 'email', 'EqualTo', 'equal_to',
+    'DataRequired', 'Email', 'email', 'EqualTo', 'equal_to',
     'IPAddress', 'ip_address', 'InputRequired', 'input_required', 'Length',
     'length', 'NumberRange', 'number_range', 'Optional',
     'Regexp', 'regexp', 'URL', 'url', 'AnyOf',
@@ -23,6 +24,18 @@ PHONE_PATERN = re.compile(PHONE_REGEX)
 class PhoneNumber(Regexp):
     def __init__(self):
         super().__init__(PHONE_PATERN, message='手机号格式错误')
+
+
+class DataRequired(DataRequired_):
+    def __call__(self, form, field):
+        if field.data is None or isinstance(field.data, str) and not field.data.strip():
+            if self.message is None:
+                message = f'{field.label.text}不能为空'
+            else:
+                message = self.message
+
+            field.errors[:] = []
+            raise StopValidation(message)
 
 
 class Optional(Optional_):
