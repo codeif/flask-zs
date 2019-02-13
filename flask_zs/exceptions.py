@@ -42,6 +42,8 @@ class FormValidationError(BaseCustomException):
 
     def __init__(self, form, errmsg=None, show_first_err=True):
         if not errmsg and show_first_err:
-            errmsg = next(iter(form.errors.values()))[0]
+            name, errors = next(iter(form.errors.items()))
+            errmsg = f'{getattr(form, name).label.text}: {errors[0]}'
+
         super(FormValidationError, self).__init__(errmsg)
         self.errors = form.errors

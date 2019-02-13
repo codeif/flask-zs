@@ -30,7 +30,7 @@ class DataRequired(DataRequired_):
     def __call__(self, form, field):
         if field.data is None or isinstance(field.data, str) and not field.data.strip():
             if self.message is None:
-                message = f'{field.label.text}不能为空'
+                message = field.gettext('This field is required.')
             else:
                 message = self.message
 
