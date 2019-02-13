@@ -4,7 +4,8 @@ COPY . /app
 
 WORKDIR /app/example
 
-RUN pipenv sync
+ENV PIPENV_PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pipenv install --skip-lock
 
 ENV FLASK_ENV=development FLASK_APP=demo
 

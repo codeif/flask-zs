@@ -8,16 +8,6 @@
     :license: MIT, see LICENSE for more details.
 """
 
-import sys
-
-current_module = sys.modules[__name__]
-
-
-exceptions = [
-    ('NoError', 0, 'OK'),
-    ('LoginRequired', 1001, '需要登录'),
-]
-
 
 class BaseCustomException(Exception):
     errcode = 1000
@@ -41,11 +31,9 @@ class CustomException(BaseCustomException):
     pass
 
 
-for name, errcode, errmsg in exceptions:
-    cls = type(name,
-               (CustomException,),
-               {'errcode': errcode, 'errmsg': errmsg})
-    setattr(current_module, name, cls)
+class NoError(CustomException):
+    errcode = 0
+    errmsg = 'OK'
 
 
 class FormValidationError(BaseCustomException):
