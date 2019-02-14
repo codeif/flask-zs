@@ -19,17 +19,20 @@ class JSONForm(Form):
         data = request.get_json()
         super().__init__(data=data)
 
-    def resp(self):
-        if self.validate():
-            item = self.save()
-            return item.todict()
-        raise FormValidationError(self)
+    def check(self):
+        if not self.validate():
+            raise FormValidationError(self)
 
 
 class BaseItemForm(JSONForm):
     def __init__(self, item):
         self.item = item
         super().__init__()
+
+    def resp(self):
+        self.check()
+        item = self.save()
+        return item.todict()
 
 
 class BaseQueryForm(Form):

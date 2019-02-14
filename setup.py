@@ -7,12 +7,12 @@ with open('README.rst') as f:
 
 setup(
     name='Flask-ZS',
-    version='0.0.9',
+    version='0.0.10',
     description='A helpers for Flask.',
     long_description=readme,
     author='codeif',
     author_email='me@codeif.com',
-    url='https://github.com/codeif/Flask-ZS',
+    url='https://github.com/codeif/flask-zs',
     license='MIT',
     install_requires=['requests', 'flask', 'WTForms', 'SQLAlchemy'],
     packages=find_packages(exclude=('example',)),

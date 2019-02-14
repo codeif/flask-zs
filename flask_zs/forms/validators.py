@@ -23,7 +23,7 @@ PHONE_PATERN = re.compile(PHONE_REGEX)
 
 class PhoneNumber(Regexp):
     def __init__(self):
-        super().__init__(PHONE_PATERN, message='手机号格式错误')
+        super().__init__(PHONE_PATERN, message='无效的手机号')
 
 
 class DataRequired(DataRequired_):
