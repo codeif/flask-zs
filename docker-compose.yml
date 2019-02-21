@@ -13,15 +13,29 @@ services:
       - zs-example-db:/var/lib/mysql
     # ports:
     #   - "3806:3306"
+
+  redis:
+    image: redis
+
   web:
     image: zs-example
     depends_on:
       - db
+      - redis
     ports:
       - "5000:5000"
     volumes:
       - ".:/app:rw"
     command: ["pipenv", "run", "flask", "run", "-h", "0.0.0.0"]
+
+  celery:
+    image: zs-example
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ".:/app:rw"
+    command: ["pipenv", "run", "celery", "-A", "demo.celery_worker", "worker", "--loglevel=INFO"]
 
 volumes:
   zs-example-db:
