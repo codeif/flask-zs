@@ -7,7 +7,7 @@ with open('README.rst') as f:
 
 setup(
     name='Flask-ZS',
-    version='0.0.10',
+    version='0.0.11',
     description='A helpers for Flask.',
     long_description=readme,
     author='codeif',
