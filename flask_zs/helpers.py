@@ -131,7 +131,12 @@ class CustomFlask(Flask):
         if isinstance(rv, dict):
             rv = jsonify(rv)
         elif isinstance(rv, requests.Response):
-            rv = jsonify(rv.json()), rv.status_code
+            headers = rv.headers
+            for key in ['Server', 'Connection', 'Content-Length', 'Set-Cookie',
+                        'Content-Encoding', 'Transfer-Encoding']:
+                headers.pop(key, None)
+            rv = rv.content, rv.status_code, headers.items()
+
         return super().make_response(rv)
 
 

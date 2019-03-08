@@ -8,4 +8,4 @@ Helpers for Flask.
 
 .. code-block:: sh
 
-    pip install Flask-ZS
+    pip install flask-zs

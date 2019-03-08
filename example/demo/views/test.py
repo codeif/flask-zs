@@ -1,5 +1,6 @@
 import time
 
+import requests
 from flask import Blueprint
 
 from .. import tasks
@@ -26,3 +27,9 @@ def celery_test():
     print('this is val1, val2', val1, val2)
     assert val1 == val2
     return val1
+
+
+@bp.route('/baidu')
+def baidu():
+    return requests.get('https://www.baidu.com')
+    # return requests.get('http://httpbin.org/ip')
