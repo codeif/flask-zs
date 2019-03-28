@@ -165,7 +165,7 @@ class BaseItemView(MethodView, PaginationMixin):
     item_cls = None
     item_form_cls = None
     query_form_cls = None
-    items_pagination = False
+    items_pagination = True
 
     def get_item(self, item_id):
         if not self.item_cls:
@@ -186,10 +186,10 @@ class BaseItemView(MethodView, PaginationMixin):
             return self.item_todict(item)
         else:
             query = self.get_items_query()
-            if not self.items_pagination:
-                return self.make_resp(query)
-            else:
+            if self.items_pagination:
                 return self.make_pagination_resp(query)
+            else:
+                return self.make_resp(query)
 
     def post(self):
         return self.put(None)
