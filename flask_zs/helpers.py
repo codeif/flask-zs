@@ -168,10 +168,10 @@ class BaseItemView(MethodView, PaginationMixin):
     items_pagination = True
 
     def get_item(self, item_id):
-        if not self.item_cls:
-            abort(405)
         if item_id is None:
             return
+        if not self.item_cls:
+            abort(405)
         return self.item_cls.query.get_or_404(item_id)
 
     def get_items_query(self):
@@ -200,7 +200,9 @@ class BaseItemView(MethodView, PaginationMixin):
         item = self.get_item(item_id)
 
         form = self.item_form_cls(item)
-        return form.resp()
+        form.check()
+        item = form.save()
+        return self.item_todict(item)
 
     def delete(self, item_id):
         abort(405)

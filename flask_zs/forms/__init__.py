@@ -29,11 +29,6 @@ class BaseItemForm(JSONForm):
         self.item = item
         super().__init__()
 
-    def resp(self):
-        self.check()
-        item = self.save()
-        return item.todict()
-
 
 class BaseQueryForm(Form):
     def __init__(self):
