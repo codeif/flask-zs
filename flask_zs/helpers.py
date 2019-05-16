@@ -146,11 +146,11 @@ class PaginationMixin:
         return item.todict()
 
     def make_resp(self, query):
-        return jsonify(items=[self.item_todict(x) for x in query])
+        return dict(items=[self.item_todict(x) for x in query])
 
     def make_pagination_resp(self, query):
         p = query.paginate()
-        return jsonify(
+        return dict(
             items=[self.item_todict(x) for x in p.items],
             pagination=dict(
                 total=p.total,
