@@ -33,4 +33,6 @@ class LoginMixin:
         self._password = generate_password_hash(value)
 
     def check_password(self, password):
+        if not self._password:
+            return False
         return check_password_hash(self._password, password)
