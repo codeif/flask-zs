@@ -149,7 +149,7 @@ class PaginationMixin:
         return dict(items=[self.item_todict(x) for x in query])
 
     def make_pagination_resp(self, query):
-        p = query.paginate()
+        p = query.paginate(error_out=False)
         return dict(
             items=[self.item_todict(x) for x in p.items],
             pagination=dict(
