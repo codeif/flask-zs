@@ -22,14 +22,15 @@ def stdout_result(import_path):
     all_names = []
     for modname in find_modules(import_path):
         import_line, cls_names = find_classes(modname, import_path)
+        if not cls_names:
+            continue
         all_imports.append(import_line)
         all_names.extend(cls_names)
         import_str = '\n'.join(all_imports)
 
     all_str = ',\n    '.join([f"'{x}'" for x in sorted(all_names)])
 
-    sys.stdout.write(f"""
-{import_str}
+    sys.stdout.write(f"""{import_str}
 
 __all__ = [
     {all_str}
