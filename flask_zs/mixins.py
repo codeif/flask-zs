@@ -17,11 +17,11 @@ class TimestampMixin:
 class LoginMixin:
     @declared_attr
     def _password(cls):
-        return Column('password', String(191), comment='login password')
+        return Column("password", String(191), comment="login password")
 
     @declared_attr
     def login_allowed(cls):
-        return Column(Boolean, server_default='0')
+        return Column(Boolean, server_default="0")
 
     @hybrid_property
     def password(self):

@@ -6,8 +6,8 @@ from ..models.user import User
 
 
 class UserForm(BaseItemForm):
-    name = StringField('姓名', [DataRequired()])
-    phone = StringField('手机号', [DataRequired(), PhoneNumber()])
+    name = StringField("姓名", [DataRequired()])
+    phone = StringField("手机号", [DataRequired(), PhoneNumber()])
 
     def save(self):
         if not self.item:

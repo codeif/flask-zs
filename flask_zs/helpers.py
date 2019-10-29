@@ -20,7 +20,7 @@ from flask.views import MethodView
 from werkzeug.utils import find_modules
 
 
-def register_blueprints(app, import_path, bp_name='bp'):
+def register_blueprints(app, import_path, bp_name="bp"):
     """Register all Blueprint instances on the specified Flask application found
     in all modules for the specified package.
 
@@ -35,7 +35,7 @@ def register_blueprints(app, import_path, bp_name='bp'):
             app.register_blueprint(bp)
 
 
-def register_api(bp, view_cls, endpoint, url, pk='item_id', pk_type='int'):
+def register_api(bp, view_cls, endpoint, url, pk="item_id", pk_type="int"):
     """register restful api router
 
     :param bp: flask.BluePrint object
@@ -46,12 +46,11 @@ def register_api(bp, view_cls, endpoint, url, pk='item_id', pk_type='int'):
     :param pk_type: http://flask.pocoo.org/docs/0.12/quickstart/#variable-rules
     """
     view_func = view_cls.as_view(endpoint)
-    bp.add_url_rule(url, defaults={pk: None},
-                    view_func=view_func, methods=['GET'])
-    bp.add_url_rule(url, view_func=view_func, methods=['POST'])
-    bp.add_url_rule('{0}<{1}:{2}>'.format(url, pk_type, pk),
-                    view_func=view_func,
-                    methods=['GET', 'PUT', 'DELETE', 'PATCH'])
+    bp.add_url_rule(url, defaults={pk: None}, view_func=view_func, methods=["GET"])
+    bp.add_url_rule(url, view_func=view_func, methods=["POST"])
+    bp.add_url_rule(
+        "{0}<{1}:{2}>".format(url, pk_type, pk), view_func=view_func, methods=["GET", "PUT", "DELETE", "PATCH"]
+    )
 
 
 class TodictMixin:
@@ -69,7 +68,7 @@ class TodictMixin:
         if only:
             return only
 
-        exclude_set = {'password', 'created_at'}
+        exclude_set = {"password", "created_at"}
         if self._todict_exclude:
             exclude_set.update(self._todict_exclude)
         if exclude:
@@ -93,8 +92,7 @@ class TodictMixin:
         return data or None
 
     def todict_simple(self):
-        only = self._todict_simple or [x for x in self._get_todict_keys()
-                                       if x in ['id', 'name']]
+        only = self._todict_simple or [x for x in self._get_todict_keys() if x in ["id", "name"]]
         return self.todict(only=only)
 
 
@@ -108,11 +106,11 @@ class JSONEncoder(json.JSONEncoder):
         if isinstance(o, set):
             return list(o)
         if isinstance(o, datetime):
-            return o.isoformat(sep=' ', timespec='seconds')
+            return o.isoformat(sep=" ", timespec="seconds")
         if isinstance(o, date):
             return o.isoformat()
         if isinstance(o, time):
-            return o.isoformat(timespec='minutes')
+            return o.isoformat(timespec="minutes")
         if isinstance(o, decimal.Decimal):
             return float(o)
         if isinstance(o, uuid.UUID):
@@ -125,6 +123,7 @@ class JSONEncoder(json.JSONEncoder):
 
 class CustomFlask(Flask):
     """使用自定义的JSONEncoder，并能处理view直接返回dict"""
+
     json_encoder = JSONEncoder
 
     def make_response(self, rv):
@@ -132,8 +131,14 @@ class CustomFlask(Flask):
             rv = jsonify(rv)
         elif isinstance(rv, requests.Response):
             headers = rv.headers
-            for key in ['Server', 'Connection', 'Content-Length', 'Set-Cookie',
-                        'Content-Encoding', 'Transfer-Encoding']:
+            for key in [
+                "Server",
+                "Connection",
+                "Content-Length",
+                "Set-Cookie",
+                "Content-Encoding",
+                "Transfer-Encoding",
+            ]:
                 headers.pop(key, None)
             rv = rv.content, rv.status_code, headers.items()
 
@@ -152,12 +157,7 @@ class PaginationMixin:
         p = query.paginate(error_out=False)
         return dict(
             items=[self.item_todict(x) for x in p.items],
-            pagination=dict(
-                total=p.total,
-                page=p.page,
-                per_page=p.per_page,
-                pages=p.pages
-            ),
+            pagination=dict(total=p.total, page=p.page, per_page=p.per_page, pages=p.pages),
         )
 
 

@@ -3,17 +3,12 @@ from wtforms import Form
 
 from ..exceptions import FormValidationError
 
-__all__ = (
-    'BaseItemForm',
-    'BaseQueryForm',
-    'Form',
-    'JSONForm',
-)
+__all__ = ("BaseItemForm", "BaseQueryForm", "Form", "JSONForm")
 
 
 class JSONForm(Form):
     class Meta:
-        locales = ['zh']
+        locales = ["zh"]
 
     def __init__(self):
         data = request.get_json()

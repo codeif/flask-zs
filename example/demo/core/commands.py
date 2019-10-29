@@ -8,22 +8,19 @@ from ..models.user import User
 def init_db():
     db.create_all()
 
-    for name, phone in [
-        ('张三', '15212451234'),
-        ('李四', '13412451234'),
-    ]:
+    for name, phone in [("张三", "15212451234"), ("李四", "13412451234")]:
         user = User(name=name, phone=phone)
         db.session.add(user)
 
     db.session.commit()
 
 
-@click.command('init-db')
+@click.command("init-db")
 @with_appcontext
 def init_db_command():
     """Clear existing data and create new tables."""
     init_db()
-    click.echo('Initialized the database.')
+    click.echo("Initialized the database.")
 
 
 def init_app(app):

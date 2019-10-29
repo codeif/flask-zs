@@ -22,5 +22,5 @@ def register_error_handlers(app):
         # resp = jsonify(errcode=e.code, errmsg=e.name)
         resp = e.get_response()
         # resp.headers['WWW-Authenticate'] = 'Basic realm="Restricted Content"'
-        resp.headers['WWW-Authenticate'] = 'Basic realm="Private Property"'
+        resp.headers["WWW-Authenticate"] = 'Basic realm="Private Property"'
         return resp

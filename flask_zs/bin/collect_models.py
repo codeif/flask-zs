@@ -26,21 +26,23 @@ def stdout_result(import_path):
             continue
         all_imports.append(import_line)
         all_names.extend(cls_names)
-        import_str = '\n'.join(all_imports)
+        import_str = "\n".join(all_imports)
 
-    all_str = '\n    '.join([f'"{x}",' for x in sorted(all_names)])
+    all_str = "\n    ".join([f'"{x}",' for x in sorted(all_names)])
 
-    sys.stdout.write(f"""{import_str}
+    sys.stdout.write(
+        f"""{import_str}
 
 __all__ = [
     {all_str}
 ]
-""")
+"""
+    )
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Collect all models to single file.')
-    parser.add_argument('project_name', help='current project name(package name), eg. zsdemo')
+    parser = argparse.ArgumentParser(description="Collect all models to single file.")
+    parser.add_argument("project_name", help="current project name(package name), eg. zsdemo")
     parsed_args = parser.parse_args()
-    import_path = f'{parsed_args.project_name}.models'
+    import_path = f"{parsed_args.project_name}.models"
     stdout_result(import_path)
