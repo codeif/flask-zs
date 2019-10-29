@@ -28,7 +28,7 @@ def stdout_result(import_path):
         all_names.extend(cls_names)
         import_str = '\n'.join(all_imports)
 
-    all_str = ',\n    '.join([f"'{x}'" for x in sorted(all_names)])
+    all_str = '\n    '.join([f'"{x}",' for x in sorted(all_names)])
 
     sys.stdout.write(f"""{import_str}
 
