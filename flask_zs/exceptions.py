@@ -2,7 +2,7 @@
     flask_zs.exceptions
     ~~~~~~~~~~~~
 
-    Flask-ZS exceptions module
+    flask-zs exceptions module
 
     :copyright: (c) 2018 by codeif.
     :license: MIT, see LICENSE for more details.

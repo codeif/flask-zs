@@ -1,4 +1,4 @@
-Flask-ZS demo
+flask-zs demo
 ===============
 
 demo

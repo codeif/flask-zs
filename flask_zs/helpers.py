@@ -2,7 +2,7 @@
     flask_zs.helpers
     ~~~~~~~~~~~~
 
-    Flask-ZS helpers module
+    flask-zs helpers module
 
     :copyright: (c) 2018 by codeif.
     :license: MIT, see LICENSE for more details.
