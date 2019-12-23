@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 from setuptools import find_packages, setup
 
-with open("README.rst") as f:
+with open("README.rst", encoding="utf-8") as f:
     readme = f.read()
 
 
 setup(
     name="flask-zs",
-    version="0.0.22",
+    version="0.0.23",
     description="A helpers for Flask.",
     long_description=readme,
     author="codeif",
