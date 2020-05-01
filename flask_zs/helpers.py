@@ -49,7 +49,9 @@ def register_api(bp, view_cls, endpoint, url, pk="item_id", pk_type="int"):
     bp.add_url_rule(url, defaults={pk: None}, view_func=view_func, methods=["GET"])
     bp.add_url_rule(url, view_func=view_func, methods=["POST"])
     bp.add_url_rule(
-        "{0}<{1}:{2}>".format(url, pk_type, pk), view_func=view_func, methods=["GET", "PUT", "DELETE", "PATCH"]
+        "{0}<{1}:{2}>".format(url, pk_type, pk),
+        view_func=view_func,
+        methods=["GET", "PUT", "DELETE", "PATCH"],
     )
 
 
@@ -92,7 +94,9 @@ class TodictMixin:
         return data or None
 
     def todict_simple(self):
-        only = self._todict_simple or [x for x in self._get_todict_keys() if x in ["id", "name"]]
+        only = self._todict_simple or [
+            x for x in self._get_todict_keys() if x in ["id", "name"]
+        ]
         return self.todict(only=only)
 
 
@@ -157,7 +161,9 @@ class PaginationMixin:
         p = query.paginate(error_out=False)
         return dict(
             items=[self.item_todict(x) for x in p.items],
-            pagination=dict(total=p.total, page=p.page, per_page=p.per_page, pages=p.pages),
+            pagination=dict(
+                total=p.total, page=p.page, per_page=p.per_page, pages=p.pages
+            ),
         )
 
 

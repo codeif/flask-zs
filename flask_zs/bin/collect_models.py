@@ -13,7 +13,9 @@ def find_classes(modname, import_path):
     for cls_name, cls_ in inspect.getmembers(mod, inspect.isclass):
         if issubclass(cls_, BaseModel):
             cls_names.append(cls_name)
-    import_line = f'from {modname.replace(import_path, "")} import {", ".join(cls_names)}'
+    import_line = (
+        f'from {modname.replace(import_path, "")} import {", ".join(cls_names)}'
+    )
     return import_line, cls_names
 
 
@@ -42,7 +44,9 @@ __all__ = [
 
 def main():
     parser = argparse.ArgumentParser(description="Collect all models to single file.")
-    parser.add_argument("project_name", help="current project name(package name), eg. zsdemo")
+    parser.add_argument(
+        "project_name", help="current project name(package name), eg. zsdemo"
+    )
     parsed_args = parser.parse_args()
     import_path = f"{parsed_args.project_name}.models"
     stdout_result(import_path)

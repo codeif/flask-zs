@@ -2,7 +2,16 @@ import re
 
 from wtforms.validators import URL, UUID, AnyOf
 from wtforms.validators import DataRequired as DataRequired_
-from wtforms.validators import Email, EqualTo, InputRequired, IPAddress, Length, MacAddress, NoneOf, NumberRange
+from wtforms.validators import (
+    Email,
+    EqualTo,
+    InputRequired,
+    IPAddress,
+    Length,
+    MacAddress,
+    NoneOf,
+    NumberRange,
+)
 from wtforms.validators import Optional as Optional_
 from wtforms.validators import (
     Regexp,
@@ -76,7 +85,11 @@ class DataRequired(DataRequired_):
 
 class Optional(Optional_):
     def __call__(self, form, field):
-        if field.data is None or isinstance(field.data, str) and not self.string_check(field.data):
+        if (
+            field.data is None
+            or isinstance(field.data, str)
+            and not self.string_check(field.data)
+        ):
             field.errors[:] = []
             raise StopValidation
 
@@ -89,7 +102,11 @@ class Range(object):
 
     def __call__(self, form, field):
         data = field.data
-        if data is None or (self.min is not None and data < self.min) or (self.max is not None and data > self.max):
+        if (
+            data is None
+            or (self.min is not None and data < self.min)
+            or (self.max is not None and data > self.max)
+        ):
             message = self.message
             if message is None:
                 # we use %(min)s interpolation to support floats, None, and
