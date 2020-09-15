@@ -7,7 +7,7 @@ from .helpers import (
     register_api,
     register_blueprints,
 )
-from .response import ok_resp
+from .response import make_msg
 
 __all__ = (
     "BaseItemView",
@@ -16,6 +16,6 @@ __all__ = (
     "PaginationMixin",
     "register_api",
     "register_blueprints",
-    "ok_resp",
+    "make_msg",
     "register_error_handlers",
 )

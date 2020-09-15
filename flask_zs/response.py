@@ -1,5 +1,5 @@
 from flask import jsonify
 
 
-def ok_resp():
-    return jsonify(errcode=0, errmsg="ok")
+def make_msg(code, msg):
+    return jsonify(errcode=code, errmsg=msg)
