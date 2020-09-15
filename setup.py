@@ -7,7 +7,7 @@ with open("README.rst", encoding="utf-8") as f:
 
 setup(
     name="flask-zs",
-    version="0.0.25",
+    version="0.1.0",
     description="A helpers for Flask.",
     long_description=readme,
     author="codeif",
@@ -17,6 +17,6 @@ setup(
     entry_points={
         "console_scripts": ["collect-models = flask_zs.bin.collect_models:main"]
     },
-    install_requires=["requests", "flask", "WTForms", "SQLAlchemy"],
+    install_requires=["requests", "flask", "SQLAlchemy"],
     packages=find_packages(exclude=("example",)),
 )

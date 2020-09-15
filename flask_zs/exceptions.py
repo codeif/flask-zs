@@ -34,16 +34,3 @@ class CustomException(BaseCustomException):
 class NoError(CustomException):
     errcode = 0
     errmsg = "OK"
-
-
-class FormValidationError(BaseCustomException):
-    errcode = 2001
-    errmsg = "表单验证错误"
-
-    def __init__(self, form, errmsg=None, show_first_err=True):
-        if not errmsg and show_first_err:
-            name, errors = next(iter(form.errors.items()))
-            errmsg = f"{getattr(form, name).label.text}: {errors[0]}"
-
-        super(FormValidationError, self).__init__(errmsg)
-        self.errors = form.errors
