@@ -3,6 +3,14 @@ Helpers for Flask.
 
 Helpers for Flask. 使用示例 `codeif/flask-zs-template  <https://github.com/codeif/flask-zs-template>`_
 
+包含:
+
+- flask
+- sqlalchemy
+- requests
+- pydantic
+
+
 安装
 ----
 
