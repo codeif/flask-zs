@@ -131,7 +131,7 @@ class CustomFlask(Flask):
     json_encoder = JSONEncoder
 
     def make_response(self, rv):
-        if isinstance(rv, dict):
+        if isinstance(rv, (dict, list, tuple)):
             rv = jsonify(rv)
         elif isinstance(rv, requests.Response):
             headers = rv.headers
