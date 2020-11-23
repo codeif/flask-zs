@@ -14,6 +14,7 @@ import json
 import uuid
 from datetime import date, datetime, time
 
+import requests
 from flask import Blueprint, Flask, abort
 from flask.views import MethodView
 from werkzeug.utils import find_modules
@@ -105,7 +106,6 @@ class BaseModel(TodictMixin):
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
-        print(o)
         # See "Date Time String Format" in the ECMA-262 specification.
         if isinstance(o, set):
             return list(o)
@@ -129,6 +129,22 @@ class CustomFlask(Flask):
     """使用自定义的JSONEncoder，并能处理view直接返回dict"""
 
     json_encoder = JSONEncoder
+
+    def make_response(self, rv):
+        if isinstance(rv, requests.Response):
+            headers = rv.headers
+            for key in [
+                "Server",
+                "Connection",
+                "Content-Length",
+                "Set-Cookie",
+                "Content-Encoding",
+                "Transfer-Encoding",
+            ]:
+                headers.pop(key, None)
+            rv = rv.content, rv.status_code, headers.items()
+
+        return super().make_response(rv)
 
 
 # Views Mixin

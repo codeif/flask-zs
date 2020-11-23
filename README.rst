@@ -7,6 +7,7 @@ Helpers for Flask. 使用示例 `codeif/flask-zs-template  <https://github.com/c
 
 - flask
 - sqlalchemy
+- requests
 - pydantic
 
 
