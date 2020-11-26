@@ -7,7 +7,7 @@ from .helpers import (
     register_api,
     register_blueprints,
 )
-from .response import make_msg
+from .response import make_json_errmsg
 
 __all__ = (
     "BaseItemView",
@@ -16,6 +16,6 @@ __all__ = (
     "PaginationMixin",
     "register_api",
     "register_blueprints",
-    "make_msg",
+    "make_json_errmsg",
     "register_error_handlers",
 )
