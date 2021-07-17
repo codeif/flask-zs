@@ -15,14 +15,11 @@ import uuid
 from datetime import date, datetime, time
 
 import requests
-from flask import Blueprint, Flask, abort
-from flask.views import MethodView
+from flask import Blueprint, Flask
 from werkzeug.utils import find_modules
 
 
-def register_blueprints(
-    app, import_path, bp_name="bp", include_packages=False, recursive=False
-):
+def register_blueprints(app, import_path, bp_name="bp", include_packages=False, recursive=False):
     """Register all Blueprint instances on the specified Flask application found
     in all modules for the specified package.
 
@@ -30,9 +27,7 @@ def register_blueprints(
     :param import_path: the dotted path for the package to find child modules.
     :param bp_name: Blueprint name in views.
     """
-    for name in find_modules(
-        import_path, include_packages=include_packages, recursive=recursive
-    ):
+    for name in find_modules(import_path, include_packages=include_packages, recursive=recursive):
         mod = importlib.import_module(name)
         bp = getattr(mod, bp_name, None)
         if isinstance(bp, Blueprint):
@@ -47,15 +42,14 @@ def register_api(bp, view_cls, endpoint, url, pk="item_id", pk_type="int"):
     :param endpoint: endpint
     :param url: url path, eg: /users/
     :param pk: entity id variable name
-    :param pk_type: http://flask.pocoo.org/docs/0.12/quickstart/#variable-rules
+    :param pk_type:
+        https://flask.palletsprojects.com/en/2.0.x/quickstart/#variable-rules
     """
     view_func = view_cls.as_view(endpoint)
     bp.add_url_rule(url, defaults={pk: None}, view_func=view_func, methods=["GET"])
     bp.add_url_rule(url, view_func=view_func, methods=["POST"])
     bp.add_url_rule(
-        "{0}<{1}:{2}>".format(url, pk_type, pk),
-        view_func=view_func,
-        methods=["GET", "PUT", "DELETE", "PATCH"],
+        "{0}<{1}:{2}>".format(url, pk_type, pk), view_func=view_func, methods=["GET", "PUT", "DELETE", "PATCH"],
     )
 
 
@@ -98,9 +92,7 @@ class TodictMixin:
         return data or None
 
     def todict_simple(self):
-        only = self._todict_simple or [
-            x for x in self._get_todict_keys() if x in ["id", "name"]
-        ]
+        only = self._todict_simple or [x for x in self._get_todict_keys() if x in ["id", "name"]]
         return self.todict(only=only)
 
 
@@ -129,6 +121,15 @@ class JSONEncoder(json.JSONEncoder):
             return super().default(o)
 
 
+def requests_resp_gen(r):
+    while True:
+        data = r.raw.read(4096)
+        if not data:
+            r.close()
+            break
+        yield data
+
+
 class CustomFlask(Flask):
     """使用自定义的JSONEncoder，并能处理view直接返回dict"""
 
@@ -140,13 +141,9 @@ class CustomFlask(Flask):
             for key in [
                 "Server",
                 "Connection",
-                "Content-Length",
-                "Set-Cookie",
-                "Content-Encoding",
-                "Transfer-Encoding",
             ]:
                 headers.pop(key, None)
-            rv = rv.content, rv.status_code, headers.items()
+            return self.response_class(requests_resp_gen(rv), status=rv.status_code, headers=headers.items(),)
 
         return super().make_response(rv)
 
@@ -163,54 +160,5 @@ class PaginationMixin:
         p = query.paginate(error_out=False)
         return dict(
             items=[self.item_todict(x) for x in p.items],
-            pagination=dict(
-                total=p.total, page=p.page, per_page=p.per_page, pages=p.pages
-            ),
+            pagination=dict(total=p.total, page=p.page, per_page=p.per_page, pages=p.pages),
         )
-
-
-class BaseItemView(MethodView, PaginationMixin):
-    item_cls = None
-    item_form_cls = None
-    query_form_cls = None
-    items_pagination = True
-
-    def get_item(self, item_id):
-        if item_id is None:
-            return
-        if not self.item_cls:
-            abort(405)
-        return self.item_cls.query.get_or_404(item_id)
-
-    def get_items_query(self):
-        if self.query_form_cls is None:
-            return self.item_cls.query
-        else:
-            return self.query_form_cls().query()
-
-    def get(self, item_id):
-        if item_id:
-            item = self.get_item(item_id)
-            return self.item_todict(item)
-        else:
-            query = self.get_items_query()
-            if self.items_pagination:
-                return self.make_pagination_resp(query)
-            else:
-                return self.make_resp(query)
-
-    def post(self):
-        return self.put(None)
-
-    def put(self, item_id):
-        if self.item_form_cls is None:
-            abort(405)
-        item = self.get_item(item_id)
-
-        form = self.item_form_cls(item)
-        form.check()
-        item = form.save()
-        return self.item_todict(item)
-
-    def delete(self, item_id):
-        abort(405)
