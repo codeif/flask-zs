@@ -1,7 +1,6 @@
 import requests
 from flask import has_request_context, request
-from requests.structures import CaseInsensitiveDict
-from requests.utils import DEFAULT_ACCEPT_ENCODING
+from requests.utils import default_headers
 
 
 class HttpClientFactory:
@@ -27,32 +26,36 @@ class HttpClientFactory:
         if self.user_agent is None:
             self.auth = app.config.get(f"{self.config_prefix}_USER_AGENT")
 
-    def client(self, headers=None):
+    def create_client(self, headers=None):
         """生成一个session, headers存在时覆盖默认haeders"""
         return HttpClient(
             base_url=self.base_url, headers=headers or self.headers, auth=self.auth, user_agent=self.user_agent,
         )
 
+    def request(self, method, path, **kwargs):
+        with self.create_client() as client:
+            return client.request(self, method, path, **kwargs)
+
     def get(self, path, **kwargs):
-        return self.client().request("GET", path, **kwargs)
+        return self.request("GET", path, **kwargs)
 
     def options(self, path, **kwargs):
-        return self.client().request("OPTIONS", path, **kwargs)
+        return self.request("OPTIONS", path, **kwargs)
 
     def head(self, path, **kwargs):
-        return self.client().request("HEAD", path, **kwargs)
+        return self.request("HEAD", path, **kwargs)
 
     def post(self, path, **kwargs):
-        return self.client().request("POST", path, **kwargs)
+        return self.request("POST", path, **kwargs)
 
     def put(self, path, **kwargs):
-        return self.client().request("PUT", path, **kwargs)
+        return self.request("PUT", path, **kwargs)
 
     def patch(self, path, **kwargs):
-        return self.client().request("PATCH", path, **kwargs)
+        return self.request("PATCH", path, **kwargs)
 
     def delete(self, path, **kwargs):
-        return self.client().request("DELETE", path, **kwargs)
+        return self.request("DELETE", path, **kwargs)
 
 
 class HttpClient:
@@ -61,18 +64,22 @@ class HttpClient:
         self.headers = headers
         self.auth = auth
         self.user_agent = user_agent
+        self.session = requests.Session()
+        self.session.stream = True
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.session.close()
+
+    def close(self):
+        self.session.close()
 
     def request(self, method, path, **kwargs):
         url = self.base_url + path
 
-        headers = CaseInsensitiveDict(
-            {
-                "User-Agent": "flask-zs",
-                "Accept-Encoding": DEFAULT_ACCEPT_ENCODING,
-                "Accept": "*/*",
-                "Connection": "close",
-            }
-        )
+        headers = default_headers()
         if has_request_context():
             accept_encoding = request.headers.get("Accept-Encoding")
             accept = request.headers.get("Accept")
@@ -86,11 +93,8 @@ class HttpClient:
         if self.user_agent:
             headers["User-Agent"] = self.user_agent
 
-        session = requests.Session()
-        session.headers = headers
-        session.stream = True
-        resp = session.request(method, url, **kwargs)
-        session.close()
+        self.session.headers = headers
+        resp = self.session.request(method, url, **kwargs)
 
         return resp
 
