@@ -1,37 +1,28 @@
-# Example configuration for Black.
+[tool.poetry]
+name = "flask-zs"
+version = "1.0.3"
+description = "A helpers for Flask."
+authors = ["codeif <me@codeif.com>"]
+license = "MIT"
+readme = "README.rst"
+repository = "https://github.com/codeif/flask-zs"
 
-# NOTE: you have to use single-quoted strings in TOML for regular expressions.
-# It's the equivalent of r-strings in Python.  Multiline strings are treated as
-# verbose regular expressions by Black.  Use [ ] to denote a significant space
-# character.
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "*"
+requests = "*"
+SQLAlchemy = "*"
 
-[tool.black]
-line-length = 119
-target-version = ['py36', 'py37', 'py38']
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  # The following are specific to Black, you probably don't want those.
-  | blib2to3
-  | tests/data
-  | profiling
-)/
-'''
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.14.1"
+black = "^21.7b0"
+isort = "^5.9.3"
+flake8 = "^3.9.2"
+pytest = "^6.2.4"
 
-
-# Build system information below.
-# NOTE: You don't need this in your own Black configuration.
+[tool.poetry.scripts]
+collect-models = "flask_zs.bin.collect_models:main"
 
 [build-system]
-requires = ["setuptools>=41.0", "setuptools-scm", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

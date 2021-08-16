@@ -19,7 +19,9 @@ from flask import Blueprint, Flask
 from werkzeug.utils import find_modules
 
 
-def register_blueprints(app, import_path, bp_name="bp", include_packages=False, recursive=False):
+def register_blueprints(
+    app, import_path, bp_name="bp", include_packages=False, recursive=False
+):
     """Register all Blueprint instances on the specified Flask application found
     in all modules for the specified package.
 
@@ -27,7 +29,9 @@ def register_blueprints(app, import_path, bp_name="bp", include_packages=False, 
     :param import_path: the dotted path for the package to find child modules.
     :param bp_name: Blueprint name in views.
     """
-    for name in find_modules(import_path, include_packages=include_packages, recursive=recursive):
+    for name in find_modules(
+        import_path, include_packages=include_packages, recursive=recursive
+    ):
         mod = importlib.import_module(name)
         bp = getattr(mod, bp_name, None)
         if isinstance(bp, Blueprint):
@@ -49,7 +53,9 @@ def register_api(bp, view_cls, endpoint, url, pk="item_id", pk_type="int"):
     bp.add_url_rule(url, defaults={pk: None}, view_func=view_func, methods=["GET"])
     bp.add_url_rule(url, view_func=view_func, methods=["POST"])
     bp.add_url_rule(
-        "{0}<{1}:{2}>".format(url, pk_type, pk), view_func=view_func, methods=["GET", "PUT", "DELETE", "PATCH"],
+        "{0}<{1}:{2}>".format(url, pk_type, pk),
+        view_func=view_func,
+        methods=["GET", "PUT", "DELETE", "PATCH"],
     )
 
 
@@ -92,7 +98,9 @@ class TodictMixin:
         return data or None
 
     def todict_simple(self):
-        only = self._todict_simple or [x for x in self._get_todict_keys() if x in ["id", "name"]]
+        only = self._todict_simple or [
+            x for x in self._get_todict_keys() if x in ["id", "name"]
+        ]
         return self.todict(only=only)
 
 
@@ -121,13 +129,12 @@ class JSONEncoder(json.JSONEncoder):
             return super().default(o)
 
 
-def requests_resp_gen(r):
+def _iter_content(r, chunk_size=2 ** 12):
     while True:
-        data = r.raw.read(4096)
-        if not data:
-            r.close()
+        chunk = r.raw.read(chunk_size)
+        if not chunk:
             break
-        yield data
+        yield chunk
 
 
 class CustomFlask(Flask):
@@ -143,7 +150,9 @@ class CustomFlask(Flask):
                 "Connection",
             ]:
                 headers.pop(key, None)
-            return self.response_class(requests_resp_gen(rv), status=rv.status_code, headers=headers.items(),)
+            return self.response_class(
+                _iter_content(rv), status=rv.status_code, headers=headers.items(),
+            )
 
         return super().make_response(rv)
 
@@ -160,5 +169,7 @@ class PaginationMixin:
         p = query.paginate(error_out=False)
         return dict(
             items=[self.item_todict(x) for x in p.items],
-            pagination=dict(total=p.total, page=p.page, per_page=p.per_page, pages=p.pages),
+            pagination=dict(
+                total=p.total, page=p.page, per_page=p.per_page, pages=p.pages
+            ),
         )
