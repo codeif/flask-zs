@@ -28,8 +28,11 @@ def stdout_result(import_path):
             continue
         all_imports.append(import_line)
         all_names.extend(cls_names)
-        import_str = "\n".join(all_imports)
 
+    if not all_imports:
+        return
+
+    import_str = "\n".join(all_imports)
     all_str = "\n    ".join([f'"{x}",' for x in sorted(all_names)])
 
     sys.stdout.write(
