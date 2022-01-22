@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flask-zs"
-version = "1.0.5"
+version = "1.0.6"
 description = "A helpers for Flask."
 authors = ["codeif <me@codeif.com>"]
 license = "MIT"
@@ -12,6 +12,7 @@ python = "^3.8"
 Flask = "*"
 requests = "*"
 zs-mixins = {version = "*", optional = true}
+flask-http-client = {version = "*", optional = true}
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.14.1"
@@ -25,19 +26,13 @@ collect-models = "flask_zs.bin.collect_models:main"
 
 [tool.poetry.extras]
 mixins = ["zs-mixins"]
+http-client = ["flask-http-client"]
+all = ["zs-mixins", "flask-http-client"]
 
 [tool.black]
 line-length = 88
 target-version = ['py36', 'py37', 'py38']
 include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # The following are specific to Black, you probably don't want those.
-  | blib2to3
-  | tests/data
-  | profiling
-)/
-'''
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

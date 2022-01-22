@@ -6,7 +6,6 @@ from .helpers import (
     register_api,
     register_blueprints,
 )
-from .httpclient import HttpClient
 from .response import make_errmsg
 
 __all__ = (
@@ -17,5 +16,4 @@ __all__ = (
     "register_blueprints",
     "make_errmsg",
     "register_error_handlers",
-    "HttpClient",
 )
