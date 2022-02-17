@@ -129,14 +129,6 @@ class JSONEncoder(json.JSONEncoder):
             return super().default(o)
 
 
-def _iter_content(r, chunk_size=2 ** 12):
-    while True:
-        chunk = r.raw.read(chunk_size)
-        if not chunk:
-            break
-        yield chunk
-
-
 class CustomFlask(Flask):
     """使用自定义的JSONEncoder，并能处理view直接返回dict"""
 
@@ -151,7 +143,7 @@ class CustomFlask(Flask):
             ]:
                 headers.pop(key, None)
             return self.response_class(
-                _iter_content(rv), status=rv.status_code, headers=headers.items(),
+                rv.iter_content(), status=rv.status_code, headers=headers.items(),
             )
 
         return super().make_response(rv)

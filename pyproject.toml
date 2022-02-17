@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flask-zs"
-version = "1.0.6"
+version = "1.0.7"
 description = "A helpers for Flask."
 authors = ["codeif <me@codeif.com>"]
 license = "MIT"
