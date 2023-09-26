@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flask-zs"
-version = "1.0.7"
+version = "1.0.8"
 description = "A helpers for Flask."
 authors = ["codeif <me@codeif.com>"]
 license = "MIT"
@@ -16,10 +16,6 @@ flask-http-client = {version = "*", optional = true}
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.14.1"
-black = "^21.7b0"
-isort = "^5.9.3"
-flake8 = "^3.9.2"
-pytest = "^6.2.4"
 
 [tool.poetry.scripts]
 collect-models = "flask_zs.bin.collect_models:main"
@@ -27,13 +23,15 @@ collect-models = "flask_zs.bin.collect_models:main"
 [tool.poetry.extras]
 mixins = ["zs-mixins"]
 http-client = ["flask-http-client"]
-all = ["zs-mixins", "flask-http-client"]
+full = ["zs-mixins", "flask-http-client"]
+
+[tool.isort]
+profile = "black"
+float_to_top = true
 
 [tool.black]
 line-length = 88
-target-version = ['py36', 'py37', 'py38']
-include = '\.pyi?$'
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
